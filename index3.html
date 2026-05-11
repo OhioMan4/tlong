@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thăng Long Pray - Sĩ Tử Tài Ba</title>
+    <style>
+        :root {
+            --tl-red: #ed1c24;
+            --tl-blue: #0000ff;
+            --main-bg: #fff5e1; /* Màu nền kem hài hòa */
+            --content-bg: #fff8f0; /* Màu nền vùng nội dung nhẹ nhàng */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--main-bg);
+            /* Bỏ họa tiết vở ô ly, dùng màu nền trơn nhẹ nhàng */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        header {
+            width: 100%;
+            background-color: #fff;
+            padding: 15px 0;
+            text-align: center;
+            border-bottom: 4px solid var(--tl-blue);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            z-index: 10;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header-logo {
+            width: 60px;
+            height: 60px;
+        }
+
+        .logo-text {
+            color: var(--tl-red);
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin: 0;
+        }
+
+        .slogan {
+            color: var(--tl-blue);
+            font-size: 0.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .main-container {
+            max-width: 600px;
+            width: 90%;
+            margin-top: 30px;
+            background-color: var(--content-bg);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        /* Khu vực bát nhang trang trọng */
+        .altar-zone {
+            position: relative;
+            background-color: #fff;
+            padding: 40px 20px;
+            border-radius: 50% 50% 15px 15px;
+            border: 5px solid var(--tl-red);
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .wooden-base {
+            width: 100%;
+            height: 15px;
+            background-color: #5d2e14;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+
+        .burner-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 140px;
+            justify-content: flex-end;
+        }
+
+        .incense-burner {
+            width: 90px;
+            height: 70px;
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            border-radius: 10px 10px 40px 40px;
+            border: 3px solid #8b6b00;
+            position: relative;
+            box-shadow: inset 0 -5px 10px rgba(0,0,0,0.15);
+        }
+
+        .incense-burner::after { /* Họa tiết trên bát nhang */
+            content: '卍';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #8b6b00;
+            font-size: 20px;
+            opacity: 0.4;
+        }
+
+        /* Nhang và Khói mượt mà */
+        .sticks {
+            display: flex;
+            gap: 12px;
+            margin-bottom: -5px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sticks.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stick {
+            width: 4px;
+            height: 65px;
+            background-color: #a0522d;
+            position: relative;
+        }
+
+        .stick::before {
+            content: '';
+            position: absolute;
+            top: 0; width: 100%; height: 4px;
+            background-color: #ff4500;
+            box-shadow: 0 0 10px #ff4500;
+        }
+
+        .smoke {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            display: none;
+        }
+
+        @keyframes smokeMượt {
+            0% { transform: translate(-50%, 0) scale(1); opacity: 0; }
+            30% { transform: translate(-45%, -40px) scale(1.5); opacity: 0.5; }
+            100% { transform: translate(-55%, -100px) scale(2.5); opacity: 0; }
+        }
+
+        .active .smoke {
+            display: block;
+            animation: smokeMượt 3.5s infinite ease-out;
+        }
+
+        /* Nhân vật hoạt hình học sinh */
+        .student-char {
+            position: absolute;
+            bottom: -20px;
+            width: 80px;
+            z-index: 5;
+        }
+        .boy { left: -40px; }
+        .girl { right: -40px; }
+
+        /* Form nhập liệu */
+        .form-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            border: 2px solid var(--tl-blue);
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--tl-red);
+            outline: none;
+            background-color: #fffcfc;
+        }
+
+        .btn-pray {
+            background-color: var(--tl-red);
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
+            box-shadow: 0 8px 20px rgba(237, 28, 36, 0.2);
+        }
+
+        .btn-pray:hover {
+            background-color: #d4161b;
+        }
+
+        .btn-pray:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 10px rgba(237, 28, 36, 0.2);
+        }
+
+        /* Modal lời chúc */
+        #wish-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background-color: white;
+            width: 85%;
+            max-width: 400px;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            border: 5px solid var(--tl-blue);
+            animation: popUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popUp {
+            from { transform: scale(0.6); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        #final-wish {
+            font-size: 1.3rem;
+            color: var(--tl-red);
+            line-height: 1.6;
+            margin: 25px 0;
+            font-weight: 600;
+            white-space: pre-line;
+        }
+
+        .close-btn {
+            background-color: var(--tl-blue);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .close-btn:hover {
+            background-color: #0000cd;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <img src="path/to/logo_ThangLong.png" alt="Logo Thăng Long" class="header-logo">
+        <div>
+            <div class="logo-text">THĂNG LONG</div>
+            <div class="slogan">NỖ LỰC - CẨN THẬN - LỢI MÌNH - LỢI NGƯỜI</div>
+        </div>
+    </div>
+</header>
+
+<div class="main-container">
+    <svg class="student-char boy" viewBox="0 0 100 100">
+        <circle cx="50" cy="30" r="20" fill="#ffdbac"/>
+        <path d="M30 50 Q50 10 70 50" fill="#333"/> <path d="M30 50 L70 50 L80 90 L20 90 Z" fill="#ffffff"/> <path d="M40 50 L50 65 L60 50" fill="red"/> <circle cx="43" cy="30" r="2" fill="#000"/> <circle cx="57" cy="30" r="2" fill="#000"/>
+    </svg>
+
+    <svg class="student-char girl" viewBox="0 0 100 100">
+        <circle cx="50" cy="30" r="20" fill="#ffdbac"/>
+        <path d="M25 30 Q25 5 50 5 Q75 5 75 30 L80 60 L20 60 Z" fill="#333"/> <path d="M30 55 L70 55 L80 95 L20 95 Z" fill="#ffffff"/> <path d="M40 55 L50 70 L60 55" fill="red"/> <circle cx="43" cy="30" r="2" fill="#000"/> <circle cx="57" cy="30" r="2" fill="#000"/>
+    </svg>
+
+    <div class="altar-zone">
+        <div style="font-weight: bold; color: var(--tl-blue); margin-bottom: 10px;">TÂM THÀNH TẤT ỨNG</div>
+        <div class="burner-container">
+            <div class="sticks" id="stick-group">
+                <div class="stick"><div class="smoke">☁️</div></div>
+                <div class="stick"><div class="smoke">☁️</div></div>
+                <div class="stick"><div class="smoke">☁️</div></div>
+            </div>
+            <div class="incense-burner"></div>
+            <div class="wooden-base"></div>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <input type="text" id="name" placeholder="Họ và tên sĩ tử..." required>
+        <input type="text" id="class" placeholder="Lớp em học (Ví dụ: 9A1, Lớp Thầy A...)" required>
+        <input type="text" id="branch" placeholder="Chi nhánh em đang học..." required>
+        <button class="btn-pray" onclick="handlePray()">THẮP NHANG CẦU MAY</button>
+    </div>
+</div>
+
+<div id="wish-modal">
+    <div class="modal-content">
+        <h2 style="color: var(--tl-blue); margin: 0;">🍀 LỘC MAY MẮN 🍀</h2>
+        <p>Thầy cô Thăng Long chúc sĩ tử:<br><strong id="res-name" style="color: #333; font-size: 1.2rem;"></strong></p>
+        <div id="final-wish"></div>
+        <button class="close-btn" onclick="closeModal()">CON XIN NHẬN LỘC</button>
+    </div>
+</div>
+
+<script>
+    const wishes = [
+        "Toán làm nhanh gọn\nĐáp số chuẩn xác\nĐiểm 10 bát ngát\nVui vẻ cả nhà! 📐",
+        "Văn chương lai láng\nÝ tứ sáng ngời\nGiám khảo mỉm cười\nTặng ngay điểm chót! ✍️",
+        "Tiếng Anh thông thạo\nTừ vựng đầy kho\nNgữ pháp chẳng lo\nKhoanh đâu trúng đó! 🇬🇧",
+        "Tâm thế vững vàng\nBút viết nhịp nhàng\nĐỗ ngay trường chọn\nCả lớp hân hoan! 🏆",
+        "Cẩn thận từng số\nChăm chút từng câu\nLộc Thăng Long đến\nSĩ tử dẫn đầu! ✨"
+    ];
+
+    function handlePray() {
+        const name = document.getElementById('name').value;
+        const cls = document.getElementById('class').value;
+        const branch = document.getElementById('branch').value;
+
+        if(!name || !cls || !branch) {
+            alert("Sĩ tử ơi, hãy điền đủ thông tin để lời chúc thêm linh nghiệm nhé!");
+            return;
+        }
+
+        // Kích hoạt hiệu ứng nhang
+        const group = document.getElementById('stick-group');
+        group.classList.add('active');
+
+        // Đợi hiệu ứng khói bay 2 giây rồi hiện Modal
+        setTimeout(() => {
+            document.getElementById('res-name').innerText = name;
+            document.getElementById('final-wish').innerText = wishes[Math.floor(Math.random() * wishes.length)];
+            document.getElementById('wish-modal').style.display = 'flex';
+        }, 2000);
+    }
+
+    function closeModal() {
+        document.getElementById('wish-modal').style.display = 'none';
+        document.getElementById('stick-group').classList.remove('active');
+    }
+</script>
+
+</body>
+</html>
